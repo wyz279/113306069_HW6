@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+<body>
+    <h1>113306069_HW6_1A2B</h1>
+    <input type="text" id="userGuess" placeholder="輸入4個不重複的數字">
+    <button onclick="playGame()">猜!</button>
+    <div class="log" id="log">
+        <h3>遊戲紀錄：</h3>
+    </div>
+    <script>
+    function generateAnswer() {
+        const digits = Array.from({ length: 10 }, (_, i) => i.toString());
+        const answer = [];
+        while (answer.length < 4) {
+            const randomIndex = Math.floor(Math.random() * 10);
+            answer.push(digits.splice(randomIndex, 1)[0]);
+        }
+        return answer;
+    }
+    const answer = generateAnswer();
+    let attempts = 0;
+    function compareAnswer(userInput, answer) 
+    {
+        let A = 0, B = 0;
+        for (let i = 0; i < userInput.length; i++) 
+        {
+            const num = userInput[i];
+            if (num === answer[i]) 
+            {
+                A++;
+            } 
+            else if (answer.includes(num)) 
+            {
+                B++;
+            }
+        }
+        return A+"A"+B+"B";
+    }
+    function playGame() 
+    {
+        const inputField = document.getElementById("userGuess");
+        const userInput = inputField.value.split("");
+        const log = document.getElementById("log");
+        if (userInput.length !== 4 || new Set(userInput).size !== 4 || userInput.some(num => isNaN(num))) 
+        {
+            alert("請輸入4個不重複的數字!");
+            inputField.value = "";
+            return;
+        }
+        attempts++;
+        const result = compareAnswer(userInput, answer);
+        const attemptLog = document.createElement("div");
+        attemptLog.textContent = "第"+attempts+"次: "+inputField.value+" → "+result;
+        log.appendChild(attemptLog);
+        if (result === "4A0B") 
+        {
+            alert("答對了！總共猜了"+attempts+"次");
+            inputField.disabled = true;
+            document.querySelector("button").disabled = true;
+        }
+        inputField.value = "";
+    }
+</script>
+</body>
+</html>
